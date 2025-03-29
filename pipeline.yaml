@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+    environment {
+        PROJECT_ID = 'gke-cluster-test-454517'
+        IMAGE_NAME = 'gcr.io/$PROJECT_ID/app'
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/abhinave333/python-hello-world.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+        stage('Push to GCR') {
+            steps {
+                sh 'gcloud auth configure-docker'
+                sh 'docker push $IMAGE_NAME'
+            }
+        }
+        stage('Deploy to GKE') {
+            steps {
+                sh 'kubectl apply -f deployment.yaml'
+            }
+        }
+    }
+}
