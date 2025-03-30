@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         PROJECT_ID = 'gke-cluster-test-454517'
-        IMAGE_NAME = 'gcr.io/$PROJECT_ID/app'
+        IMAGE_NAME = "gcr.io/${PROJECT_ID}/app"
     }
     stages {
         stage('Checkout Code') {
@@ -12,18 +12,18 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh 'docker build -t ${IMAGE_NAME} .'
             }
         }
         stage('Push to GCR') {
             steps {
-                sh 'gcloud auth configure-docker'
-                sh 'docker push $IMAGE_NAME'
+                sh 'gcloud auth configure-docker gcr.io'
+                sh 'docker push ${IMAGE_NAME}'
             }
         }
         stage('Deploy to GKE') {
             steps {
-                sh 'kubectl apply -f deployment.yaml'
+                sh 'kubectl apply -f ./deployment.yaml'  // Ensure the path is correct
             }
         }
     }
