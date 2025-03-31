@@ -1,11 +1,11 @@
-apiVersion: v1
+apiVersion: v2
 kind: Service
 metadata:
   name: hello-world-service
 spec:
   type: LoadBalancer
   selector:
-    app: hello-world  # Ensure this matches the label in deployment.yaml
+    app: hello-world2  # Ensure this matches the label in deployment.yaml
   ports:
     - protocol: TCP
       port: 80         # External (LoadBalancer) port

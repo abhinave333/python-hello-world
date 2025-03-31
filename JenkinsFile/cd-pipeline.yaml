@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         PROJECT_ID = 'gke-cluster-test-454517'
-        IMAGE_NAME = "gcr.io/${PROJECT_ID}/app"
+        IMAGE_NAME = "gcr.io/${PROJECT_ID}/app2"
     }
     parameters {
         string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag to deploy')
