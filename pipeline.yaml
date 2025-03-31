@@ -3,6 +3,7 @@ pipeline {
     environment {
         PROJECT_ID = 'gke-cluster-test-454517'
         IMAGE_NAME = "gcr.io/${PROJECT_ID}/app"
+        COMMIT_HASH = "${env.GIT_COMMIT}" // Ensures unique image tagging
     }
     stages {
         stage('Checkout Code') {
@@ -12,18 +13,20 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME} .'
+                sh 'docker build -t ${IMAGE_NAME}:${COMMIT_HASH} .'
             }
         }
         stage('Push to GCR') {
             steps {
                 sh 'gcloud auth configure-docker gcr.io'
-                sh 'docker push ${IMAGE_NAME}'
+                sh 'docker push ${IMAGE_NAME}:${COMMIT_HASH}'
             }
         }
-        stage('Deploy to GKE') {
+        stage('Trigger CD Pipeline') {
             steps {
-                sh 'kubectl apply -f ./deployment.yaml'  // Ensure the path is correct
+                build job: 'CD-Pipeline', parameters: [
+                    string(name: 'IMAGE_TAG', value: "${COMMIT_HASH}")
+                ]
             }
         }
     }
