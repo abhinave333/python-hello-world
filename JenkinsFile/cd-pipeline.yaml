@@ -10,8 +10,8 @@ pipeline {
     stages {
         stage('Deploy to GKE') {
             steps {
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'   // This ensures the service is exposed
+                sh 'kubectl apply -f ./JenkinsFile/deployment.yaml'
+                sh 'kubectl apply -f ./JenkinsFile/service.yaml'   // This ensures the service is exposed
             }
         }
     }
