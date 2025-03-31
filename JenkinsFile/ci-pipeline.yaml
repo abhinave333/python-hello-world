@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/abhinave333/python-hello-world/tree/demo'
+                git branch: 'demo', url: 'https://github.com/abhinave333/python-hello-world.git'
             }
         }
         stage('Build Docker Image') {
